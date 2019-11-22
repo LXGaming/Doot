@@ -33,10 +33,11 @@ public class Doot {
     public static final String VERSION = "${version}";
     
     private static Doot instance;
-    private final Logger logger = LogManager.getLogger(Doot.NAME);
+    private final Logger logger;
     
     public Doot() {
         instance = this;
+        this.logger = LogManager.getLogger(Doot.NAME);
         
         DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> {
             MinecraftForge.EVENT_BUS.register(new ClientListener());
