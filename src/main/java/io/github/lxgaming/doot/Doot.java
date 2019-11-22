@@ -19,12 +19,9 @@ package io.github.lxgaming.doot;
 import io.github.lxgaming.doot.listener.ClientListener;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.StartupMessageManager;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -41,22 +38,12 @@ public class Doot {
     public Doot() {
         instance = this;
         
-        FMLJavaModLoadingContext.get().getModEventBus().register(this);
-        
         DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> {
-            ClientListener clientListener = new ClientListener();
-            FMLJavaModLoadingContext.get().getModEventBus().register(clientListener);
-            MinecraftForge.EVENT_BUS.register(clientListener);
+            MinecraftForge.EVENT_BUS.register(new ClientListener());
         });
         
         StartupMessageManager.addModMessage(String.format("%s v%s Initialized", Doot.NAME, Doot.VERSION));
         getLogger().info("{} v{} Initialized", Doot.NAME, Doot.VERSION);
-    }
-    
-    @SubscribeEvent
-    public void setup(FMLCommonSetupEvent event) {
-        StartupMessageManager.addModMessage(String.format("%s v%s Setup", Doot.NAME, Doot.VERSION));
-        getLogger().info("{} v{} Setup", Doot.NAME, Doot.VERSION);
     }
     
     public static Doot getInstance() {
